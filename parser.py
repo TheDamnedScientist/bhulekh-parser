@@ -26,19 +26,6 @@ if file_path:
 else:
     print("No file selected.")
 
-# headers = [
-#     "खातेदार का नाम",
-#     "पिता पति संरक्षक का नाम",
-#     "लिंग",
-#     "निवास स्थान",
-#     "ह‍ि०",
-#     "भौमिक अधिकार का वर्ष",
-#     "खसरा संख्या",
-#     "क्षेत्रफल (हे.)",
-#     "आदेश",
-#     "टिप्पणी"
-# ]
-
 headers = [
     "Select-Village *",
     "land_type",
@@ -56,27 +43,13 @@ headers = [
     "legal_case_desc"
 ]
 
-village_dict = {
-    "गडरी": "गडरी (48148)",
-    "चोपडा चरगाड": "चोपडा चरगाड (48154)",
-    "झलपाडी": "झलपाडी (48152)",
-    "ड्व्वीला तल्ला": "ड्व्वीला तल्ला (979154)",
-    "पाली": "पाली (48151)",
-    "विदेयडांग": "विदेयडांग (48157)",
-    "सलाण": "सलाण (48153)"
-}
-
 # Extract common details
 tr_common = soup.find('tr', class_='sub-heading', style='border-bottom: 1px solid #e8e8e8;')
 div_tags = tr_common.find_all('div')
 div_data = [div.get_text(separator=',', strip=True).split(',') for div in div_tags]
 
 village_name = div_data[0][-1]
-for item in village_dict.keys():
-    if item in village_name:
-        village_name = village_dict[item]
-        address = item
-        break
+address = village_name
 pargana = re.sub('\(|\)', '', div_data[1][-1])
 tehsil = div_data[2][-1]
 district = div_data[3][-1]
