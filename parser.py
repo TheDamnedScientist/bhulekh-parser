@@ -32,6 +32,7 @@ headers = [
     "Bhulekh-खाता-संख्या *",
     "फसली-वर्ष *",
     "खातेदार-का-नाम *",
+    "खातेदार-का-अंतिम-नाम",
     "पिता/-पति-/-संरक्षक-का-नाम *",
     "gender",
     "Address-*",
@@ -42,6 +43,8 @@ headers = [
     "bhaumik_year",
     "legal_case_desc"
 ]
+
+surnames = ["सिंह", "सिह", "कुमार", "देवी"]
 
 # Extract common details
 tr_common = soup.find('tr', class_='sub-heading', style='border-bottom: 1px solid #e8e8e8;')
@@ -86,9 +89,38 @@ names_list = list(zip(*names_list))
 names_list = [list(item) for item in names_list]
 person_name = [re.split('\d', element)[0] for element in names_list[0]]
 person_name = [item.strip() for item in person_name]
+
+first_name = []
+last_name = []
+for name in person_name:
+    full_name = name.split()
+    if name == "श्रीमती झवरी देवी":
+        pass
+    if len(full_name) > 1:
+        if ("श्री" in full_name or "श्रीमती" in full_name) and len(full_name) == 2:
+            first_name.append(name)
+            last_name.append('')
+        else:
+            first_name.append(' '.join(full_name[0:-1]))
+            last_name.append(full_name[-1])
+    else:
+        for sur in surnames:
+            if sur in name:
+                name = name.replace(sur, "")
+                first_name.append(name)
+                last_name.append(sur)
+                break
+        else:
+            first_name.append(name)
+            last_name.append('')
+
 parents_name = [item.strip() for item in names_list[1]]
 pieces_list = [re.search('\d+', element) for element in names_list[0]]
-total_pieces = re.search('\d+', names_list[0][-1]).group(0)
+total_pieces_prep = re.search('\d+', names_list[0][-1])
+if total_pieces_prep:
+    total_pieces = total_pieces_prep.group(0)
+else:
+    total_pieces = re.search('\d+', td_data[0][-1]).group(0)
 
 pieces = []
 for element in pieces_list:
@@ -111,7 +143,7 @@ td_data.pop(0)
 bhaumiki_year = int(re.search('\d+', td_data[0][0]).group(0))
 # td_data = [names_list[0], names_list[1], gender, names_list[2]] + td_data
 # td_data = [person_name, names_list[1], gender, names_list[2], pieces] + td_data
-td_data = [[village_name]*num_items, [land_type]*num_items, [khata_number]*num_items, [phasli_year]*num_items, person_name, parents_name, gender, [address]*num_items, [caste]*num_items, [bhaumiki_year]*num_items, [total_pieces]*num_items, pieces, [bhaumiki_year]*num_items, [None]*num_items]
+td_data = [[village_name]*num_items, [land_type]*num_items, [khata_number]*num_items, [phasli_year]*num_items, first_name, last_name, parents_name, gender, [address]*num_items, [caste]*num_items, [bhaumiki_year]*num_items, [total_pieces]*num_items, pieces, [bhaumiki_year]*num_items, [None]*num_items]
 rows = zip_longest(*td_data, fillvalue='')
 
 df = pd.DataFrame(rows, columns=headers)
