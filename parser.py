@@ -44,7 +44,7 @@ headers = [
     "legal_case_desc"
 ]
 
-surnames = ["सिंह", "सिह", "कुमार", "देवी"]
+surnames = ["सिंह", "सिह", "कुमार", "देवी", "सि‍ह"]
 
 # Extract common details
 tr_common = soup.find('tr', class_='sub-heading', style='border-bottom: 1px solid #e8e8e8;')
