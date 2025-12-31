@@ -112,7 +112,7 @@ for name in person_name:
                 break
         else:
             first_name.append(name)
-            last_name.append('')
+            last_name.append('.')
 
 parents_name = [item.strip() for item in names_list[1]]
 pieces_list = [re.search('\d+', element) for element in names_list[0]]
