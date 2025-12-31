@@ -114,7 +114,19 @@ for name in person_name:
             first_name.append(name)
             last_name.append('.')
 
-parents_name = [item.strip() for item in names_list[1]]
+parents_name_temp = [item.strip() for item in names_list[1]]
+parents_name = []
+for name in parents_name_temp:
+    if name:
+        for sur in surnames:
+            if sur in name and len(name.split()) == 1:
+                name = name.replace(sur, "") + ' ' + sur
+                parents_name.append(name)
+                break
+        else:
+            parents_name.append(name)
+    else:
+        parents_name.append(".")
 pieces_list = [re.search('\d+', element) for element in names_list[0]]
 total_pieces_prep = re.search('\d+', names_list[0][-1])
 if total_pieces_prep:
