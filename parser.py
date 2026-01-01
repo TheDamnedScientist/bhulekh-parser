@@ -16,6 +16,7 @@ file_paths = filedialog.askopenfilenames(
 )
 
 count=0
+
 for file_path in file_paths:
     # print(file_path)
     count+=1
@@ -166,8 +167,9 @@ for file_path in file_paths:
     df = pd.DataFrame(rows, columns=headers)
     df = df.drop(df.index[-1])
     if count>1:
-        df_final = pd.concat([df_prev, df], ignore_index=True)
-    df_prev = df
+        df_final = pd.concat([df_final, df], ignore_index=True)
+    else:
+        df_final = df
 
 if count > 1:
     df_final.to_excel(f'output_table_combined.xlsx', index=False)
