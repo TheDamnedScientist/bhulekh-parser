@@ -15,6 +15,7 @@ file_paths = filedialog.askopenfilenames(
     filetypes=[("HTML files", "*.html *.htm"), ("All files", "*.*")]
 )
 
+file_paths = sorted(file_paths, key = lambda x: int(x.split("/")[-1].replace(".html", "")))
 count=0
 
 for file_path in file_paths:
